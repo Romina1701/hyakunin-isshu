@@ -19,7 +19,9 @@ h1{margin:0;font-size:23px} .sub{font-size:12px;opacity:.9;margin-top:3px}
 @keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .reader{position:sticky;bottom:0;background:#fffdf7;border-top:4px solid #b54b3f;padding:11px 14px calc(12px + env(safe-area-inset-bottom));min-height:190px;box-shadow:0 -5px 18px #0002}
 .label{font-size:12px;color:#7a6555;font-weight:700} #readText{font-family:serif;font-size:20px;line-height:1.6;min-height:34px;margin:3px 0 7px}
-.hint{background:#f4ead5;border-radius:10px;padding:8px 10px} #takeReveal{font-family:serif;font-size:18px;line-height:1.55;min-height:30px;color:#9b3f36}
+.hint{background:#f4ead5;border-radius:10px;padding:8px 10px;display:grid;grid-template-columns:82px 1fr;gap:10px;align-items:center}
+.hintPortrait{width:82px;height:88px;background-size:cover;background-position:center 18%;background-repeat:no-repeat;border-radius:8px;border:2px solid #c8a35c;background-color:#efe2c1;opacity:0;transition:opacity 1.2s ease}
+.hintBody{min-width:0} #takeReveal{font-family:serif;font-size:18px;line-height:1.55;min-height:30px;color:#9b3f36}
 .controls{display:flex;gap:8px;margin-top:8px} button{border:0;border-radius:10px;padding:10px 13px;font-weight:800;font-size:15px;background:#173f2a;color:white} button.secondary{background:#8a6948}
 #result{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0005;z-index:5;pointer-events:none}
 #result .box{background:#fff9e9;border:5px solid #d3a63d;border-radius:22px;padding:24px 30px;text-align:center;font-size:25px;font-weight:900;box-shadow:0 12px 40px #0005}
@@ -33,7 +35,7 @@ h1{margin:0;font-size:23px} .sub{font-size:12px;opacity:.9;margin-top:3px}
 <main id="board"><div id="grid" class="grid"></div></main>
 <section class="reader">
 <div class="label">🔊 読み札</div><div id="readText">スタートを押してください</div>
-<div class="hint"><div class="label">👀 探す札のことばも、少しずつ現れます</div><div id="takeReveal">・・・・・・</div></div>
+<div class="hint"><div id="hintPortrait" class="hintPortrait"></div><div class="hintBody"><div class="label">👀 探す札のヒント</div><div id="takeReveal">・・・・・・</div></div></div>
 <div class="controls"><button id="voiceBtn" class="secondary">🔊 もう一度読む</button><button id="nextBtn" style="display:none">次の札</button></div>
 </section>
 <div id="result"><div class="box" id="resultBox"></div></div>
@@ -90,6 +92,9 @@ function next(){
  if(!order.length){endGame();return}
  current=order.shift();locked=false;startAt=performance.now();
  gradual($('readText'),current.read,145);
+ $('hintPortrait').style.opacity='0';
+ $('hintPortrait').style.backgroundImage='url("data:image/jpeg;base64,'+portraits[current.id]+'")';
+ setTimeout(()=>{$('hintPortrait').style.opacity='1'},700);
  setTimeout(()=>gradual($('takeReveal'),current.take,240),1200);
  speak(current.read);
 }
