@@ -12,7 +12,7 @@ h1{margin:0;font-size:23px} .sub{font-size:12px;opacity:.9;margin-top:3px}
 #board{height:50vh;min-height:330px;overflow:auto;padding:12px;background:linear-gradient(135deg,#dfe9c9,#b8d4a4)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .card{min-height:190px;background:linear-gradient(180deg,#fffdf8,#f8f0dc);border:3px solid #c8a35c;border-radius:8px;padding:9px 6px;box-shadow:0 3px 8px #0002;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:17px;font-weight:700;line-height:1.55;white-space:pre-line;color:#21170f;-webkit-text-fill-color:#21170f}
-.portrait{width:100%;height:104px;object-fit:cover;object-position:center 18%;border-radius:5px;border:1px solid #d5b76d;margin-bottom:7px;background:#efe2c1}
+.portrait{width:100%;height:108px;background-size:cover;background-position:center 18%;background-repeat:no-repeat;border-radius:5px;border:1px solid #d5b76d;margin-bottom:7px;background-color:#efe2c1}
 .poemNo{font-size:10px;color:#8b6d45;margin-bottom:2px;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
 .cardText{display:block}
 .card:active{transform:scale(.97)} .card.wrong{animation:shake .25s;background:#ffd9d9} .card.right{background:#fff1a8;border-color:#d65c45}
@@ -67,7 +67,11 @@ const $=id=>document.getElementById(id);
 function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
 function render(){
  $('grid').innerHTML='';
- deck.forEach((p,i)=>{let d=document.createElement('button');d.className='card';d.dataset.id=p.id;d.innerHTML='<img class="portrait" src="data:image/jpeg;base64,'+portraits[p.id]+'" alt=""><span class="poemNo">第 '+(p.id+1)+' 首</span><span class="cardText">'+p.take+'</span>';d.onclick=()=>pick(p.id,d);$('grid').appendChild(d)})
+ deck.forEach((p,i)=>{let d=document.createElement('button');d.className='card';d.dataset.id=p.id;
+let pic=document.createElement('div');pic.className='portrait';pic.style.backgroundImage='url("data:image/jpeg;base64,'+portraits[p.id]+'")';
+let no=document.createElement('span');no.className='poemNo';no.textContent='第 '+(p.id+1)+' 首';
+let tx=document.createElement('span');tx.className='cardText';tx.textContent=p.take;
+d.appendChild(pic);d.appendChild(no);d.appendChild(tx);d.onclick=()=>pick(p.id,d);$('grid').appendChild(d)})
 }
 function speak(text){
  if(!('speechSynthesis' in window))return;
